@@ -59,8 +59,8 @@ self.addEventListener('sync', (event) => {
 self.addEventListener('push', (event) => {
   const options = {
     body: event.data ? event.data.text() : 'Neue Updates verfügbar!',
-    icon: './icon-192x192.png',
-    badge: './icon-192x192.png',
+    icon: './icon-192.png',
+    badge: './icon-192.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -70,12 +70,12 @@ self.addEventListener('push', (event) => {
       {
         action: 'explore',
         title: 'Spielen',
-        icon: './icon-192x192.png'
+        icon: './icon-192.png'
       },
       {
         action: 'close',
         title: 'Schließen',
-        icon: './icon-192x192.png'
+        icon: './icon-192.png'
       }
     ]
   };
