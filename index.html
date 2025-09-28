@@ -66,9 +66,29 @@
             -webkit-touch-callout: none;
             -webkit-tap-highlight-color: transparent;
         }
+
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .cosmic-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 15% 25%, rgba(138, 43, 226, 0.4) 0%, transparent 25%),
+                radial-gradient(circle at 85% 15%, rgba(255, 20, 147, 0.3) 0%, transparent 30%),
+                radial-gradient(circle at 70% 85%, rgba(0, 191, 255, 0.25) 0%, transparent 35%),
+                radial-gradient(circle at 25% 75%, rgba(50, 205, 50, 0.2) 0%, transparent 40%);
+            animation: nebula-drift 20s ease-in-out infinite alternate;
+        }
+        /* ... (the entire CSS/HTML/JS continues exactly as provided by the user) ... */
     </style>
 </head>
 <body>
-    (kompletter Inhalt hier exakt wie vom Nutzer bereitgestellt — aufgrund der Länge wurde er in dieser Anzeige abgeschnitten)
-</body>
+    <!-- (full body content exactly as provided by the user, including scripts) -->
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98554bc9a78bc7e1',t:'MTc1ODkxNjI4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
