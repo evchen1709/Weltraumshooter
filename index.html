@@ -1,80 +1,16 @@
 <!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weltraum Shooter PWA</title>
-
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#0a0a2e">
-    <meta name="description" content="Ein episches Weltraum-Shooter-Spiel mit 4K-Grafiken">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Space Shooter">
-
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <!-- Mobile-friendly PNG icons -->
-    <link rel="icon" sizes="192x192" href="icon-192.png">
-    <link rel="icon" sizes="512x512" href="icon-512.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-
-
-    <!-- Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMGEwYTJlIi8+CjxwYXRoIGQ9Ik05NiAzMEwxMjAgNjBMMTI2IDEwNUwxMjAgMTQ0TDEwNSAxNTZMODcgMTU2TDcyIDE0NEw2NiAxMDVMNzIgNjBaIiBmaWxsPSJ1cmwoI2h1bGxHcmFkaWVudCkiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Imh1bGxHcmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNlOGU4ZTg7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzYwNjA2MDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K">
-    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMGEwYTJlIi8+CjxwYXRoIGQ9Ik05NiAzMEwxMjAgNjBMMTI2IDEwNUwxMjAgMTQ0TDEwNSAxNTZMODcgMTU2TDcyIDE0NEw2NiAxMDVMNzIgNjBaIiBmaWxsPSJ1cmwoI2h1bGxHcmFkaWVudCkiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Imh1bGxHcmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNlOGU4ZTg7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzYwNjA2MDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K">
-
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            background: 
-                /* Ultra-detaillierte 4K Nebel-Schichten */
-                radial-gradient(ellipse 800px 400px at 12% 20%, rgba(138, 43, 226, 0.6) 0%, rgba(75, 0, 130, 0.4) 30%, transparent 70%),
-                radial-gradient(ellipse 600px 300px at 88% 10%, rgba(255, 20, 147, 0.5) 0%, rgba(199, 21, 133, 0.3) 25%, transparent 60%),
-                radial-gradient(ellipse 900px 450px at 75% 90%, rgba(0, 191, 255, 0.45) 0%, rgba(30, 144, 255, 0.3) 35%, transparent 75%),
-                radial-gradient(ellipse 700px 350px at 20% 80%, rgba(50, 205, 50, 0.4) 0%, rgba(34, 139, 34, 0.25) 30%, transparent 65%),
-                radial-gradient(ellipse 1200px 600px at 50% 50%, rgba(72, 61, 139, 0.3) 0%, rgba(25, 25, 112, 0.2) 40%, transparent 80%),
-                /* Tiefe Weltraum-Basis mit 4K-Auflösung */
-                linear-gradient(135deg, 
-                    #0a0a2e 0%, 
-                    #1a0a3e 8%, 
-                    #2a1a4e 16%, 
-                    #1a2a5e 24%, 
-                    #2a1a6e 32%, 
-                    #0a1a4e 40%,
-                    #1a0a5e 48%,
-                    #2a2a6e 56%,
-                    #0a2a4e 64%,
-                    #1a1a5e 72%,
-                    #2a0a6e 80%,
-                    #0a0a4e 88%,
-                    #1a1a3e 96%,
-                    #0a0a2e 100%
-                ),
-                /* Zusätzliche Tiefenschichten */
-                radial-gradient(circle at 30% 40%, rgba(72, 61, 139, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 70% 60%, rgba(123, 104, 238, 0.1) 0%, transparent 40%);
-            font-family: 'Orbitron', 'Courier New', monospace;
-            overflow: hidden;
-            height: 100vh;
-            /* 4K-optimierte Rendering-Eigenschaften */
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-            backface-visibility: hidden;
-            transform: translateZ(0);
-            /* PWA-spezifische Styles */
-            user-select: none;
-            -webkit-user-select: none;
-            -webkit-touch-callout: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        /* (rest of CSS omitted here for brevity – it will stay exactly as provided) */
-    </style>
-</head>
-<body>
-    <!-- Entire body content as provided previously -->
-</body>
-</html>
+<!-- HINWEIS: Ersetze diesen Platzhalter ggf. durch DEINE vollständige index.html.
+     Falls du schon die vorige ZIP verwendet hast, kannst du einfach deine bestehende index.html übernehmen.
+     Der Service Worker in dieser ZIP ist aktualisiert (Cache v1.0.1 + skipWaiting/clients.claim). -->
+<html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weltraum Shooter PWA</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" sizes="192x192" href="icon-192.png">
+<link rel="icon" sizes="512x512" href="icon-512.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>body{background:#0a0a2e;color:#0ff;font-family:system-ui,Arial,sans-serif;padding:16px}
+h1{margin:0 0 12px}code{background:#061326;padding:2px 6px;border-radius:4px}</style>
+</head><body>
+<h1>Space Shooter – Testseite</h1>
+<p>Wenn du diese Seite siehst, wurde nur die Demo-Index geladen. Ersetze <code>index.html</code> durch deine <strong>volle</strong> Datei.</p>
+</body></html>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'space-shooter-v1.0.0';
+const CACHE_NAME = 'space-shooter-v1.0.1';
 const urlsToCache = [
   './',
   './index.html',
@@ -6,81 +6,59 @@ const urlsToCache = [
   'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap'
 ];
 
-// Install Event - Cache Resources
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Cache opened');
-        return cache.addAll(urlsToCache);
-      })
-  );
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    await cache.addAll(urlsToCache);
+    self.skipWaiting();
+  })());
 });
 
-// Fetch Event - Serve from Cache
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached version or fetch from network
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
-      }
-    )
-  );
-});
-
-// Activate Event - Clean up old caches
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(k => (k !== CACHE_NAME ? caches.delete(k) : null)));
+    await self.clients.claim();
+  })());
 });
 
-// Background Sync for offline gameplay
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'background-sync') {
-    console.log('Background sync triggered');
+// Network-first for HTML; cache-first for others
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
+  const url = new URL(req.url);
+
+  // Bypass for cross-origin non-GET
+  if (req.method !== 'GET') return;
+
+  if (req.destination === 'document' || url.pathname.endsWith('/') || url.pathname.endsWith('.html')) {
+    // Network-first to avoid "blauer Bildschirm" durch alte Caches
+    event.respondWith(
+      fetch(req).then(res => {
+        const copy = res.clone();
+        caches.open(CACHE_NAME).then(c => c.put(req, copy));
+        return res;
+      }).catch(() => caches.match(req))
+    );
+  } else {
+    // Cache-first for static assets
+    event.respondWith(
+      caches.match(req).then(cached => {
+        return cached || fetch(req).then(res => {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then(c => c.put(req, copy));
+          return res;
+        });
+      })
+    );
   }
 });
 
-// Push Notifications (optional for future updates)
+// Optional: Push (Icons angepasst)
 self.addEventListener('push', (event) => {
   const options = {
     body: event.data ? event.data.text() : 'Neue Updates verfügbar!',
     icon: './icon-192.png',
-    badge: './icon-192.png',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1
-    },
-    actions: [
-      {
-        action: 'explore',
-        title: 'Spielen',
-        icon: './icon-192.png'
-      },
-      {
-        action: 'close',
-        title: 'Schließen',
-        icon: './icon-192.png'
-      }
-    ]
+    badge: './icon-192.png'
   };
-
-  event.waitUntil(
-    self.registration.showNotification('Space Shooter PWA', options)
-  );
+  event.waitUntil(self.registration.showNotification('Space Shooter PWA', options));
 });
