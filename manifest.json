@@ -7,7 +7,6 @@
   "orientation": "portrait",
   "background_color": "#0a0a2e",
   "theme_color": "#0a0a2e",
-  "description": "Ein episches Weltraum-Shooter-Spiel mit 4K-Grafiken.",
   "icons": [
     {
       "src": "icons/icon-192.png",

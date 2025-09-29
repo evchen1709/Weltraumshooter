@@ -1,6 +1,6 @@
-// Simple offline-first service worker
-const CACHE_VERSION = 'space-shooter-v1';
-const PRECACHE = [
+// Offline-first Service Worker
+const CACHE = 'space-shooter-v1';
+const ASSETS = [
   './',
   './index.html',
   './manifest.json',
@@ -9,47 +9,38 @@ const PRECACHE = [
   './icons/maskable-512.png'
 ];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_VERSION).then((cache) => cache.addAll(PRECACHE))
-  );
+self.addEventListener('install', (e) => {
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)));
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.map((k) => (k !== CACHE_VERSION ? caches.delete(k) : null)))
-    )
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then(keys => Promise.all(keys.map(k => k !== CACHE ? caches.delete(k) : null)))
   );
   self.clients.claim();
 });
 
-// Network-first for Google Fonts, cache-first for same-origin game assets
-self.addEventListener('fetch', (event) => {
-  const req = event.request;
-  const url = new URL(req.url);
-
-  // Bypass non-GET and third-party POSTs etc.
-  if (req.method !== 'GET') return;
-
+self.addEventListener('fetch', (e) => {
+  if (e.request.method !== 'GET') return;
+  const url = new URL(e.request.url);
   if (url.origin === location.origin) {
-    // Cache-first for same-origin
-    event.respondWith(
-      caches.match(req).then((cached) => cached || fetch(req).then((resp) => {
-        const respClone = resp.clone();
-        caches.open(CACHE_VERSION).then((cache) => cache.put(req, respClone));
-        return resp;
+    // Cache-first für eigene Assets
+    e.respondWith(
+      caches.match(e.request).then(resp => resp || fetch(e.request).then(r => {
+        const clone = r.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return r;
       }).catch(() => caches.match('./index.html')))
     );
   } else {
-    // Network-first for cross-origin (e.g., Google Fonts)
-    event.respondWith(
-      fetch(req).then((resp) => {
-        const clone = resp.clone();
-        caches.open(CACHE_VERSION).then((c) => c.put(req, clone));
-        return resp;
-      }).catch(() => caches.match(req))
+    // Network-first für externe Ressourcen (z.B. Google Fonts)
+    e.respondWith(
+      fetch(e.request).then(r => {
+        const clone = r.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return r;
+      }).catch(() => caches.match(e.request))
     );
   }
 });
