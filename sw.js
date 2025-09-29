@@ -1,6 +1,6 @@
 // Offline-first Service Worker
 const CACHE = 'space-shooter-v1';
-const ASSETS = [
+const PRECACHE = [
   './',
   './index.html',
   './manifest.json',
@@ -10,14 +10,12 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)));
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(PRECACHE)));
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.map(k => k !== CACHE ? caches.delete(k) : null)))
-  );
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.map(k => k !== CACHE ? caches.delete(k) : null))));
   self.clients.claim();
 });
 
@@ -25,16 +23,14 @@ self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
   if (url.origin === location.origin) {
-    // Cache-first für eigene Assets
     e.respondWith(
-      caches.match(e.request).then(resp => resp || fetch(e.request).then(r => {
+      caches.match(e.request).then(hit => hit || fetch(e.request).then(r => {
         const clone = r.clone();
         caches.open(CACHE).then(c => c.put(e.request, clone));
         return r;
       }).catch(() => caches.match('./index.html')))
     );
   } else {
-    // Network-first für externe Ressourcen (z.B. Google Fonts)
     e.respondWith(
       fetch(e.request).then(r => {
         const clone = r.clone();
