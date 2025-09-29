@@ -1,35 +1,31 @@
 {
   "name": "Weltraum Shooter PWA",
   "short_name": "Space Shooter",
-  "description": "Ein episches Weltraum-Shooter-Spiel mit 4K-Grafiken",
   "start_url": "./index.html",
-  "display": "fullscreen",
-  "orientation": "portrait-primary",
-  "theme_color": "#0a0a2e",
-  "background_color": "#0a0a2e",
   "scope": "./",
-  "lang": "de",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a2e",
+  "theme_color": "#0a0a2e",
+  "description": "Ein episches Weltraum-Shooter-Spiel mit 4K-Grafiken.",
   "icons": [
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMGEwYTJlIi8+CjxwYXRoIGQ9Ik05NiAzMEwxMjAgNjBMMTI2IDEwNUwxMjAgMTQ0TDEwNSAxNTZMODcgMTU2TDcyIDE0NEw2NiAxMDVMNzIgNjBaIiBmaWxsPSJ1cmwoI2h1bGxHcmFkaWVudCkiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Imh1bGxHcmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNlOGU4ZTg7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzYwNjA2MDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSIjMGEwYTJlIi8+CjxwYXRoIGQ9Ik0yNTYgODBMMzIwIDE2MEwzMzYgMjgwTDMyMCAzODRMMjgwIDQxNkwyMzIgNDE2TDE5MiAzODRMMTc2IDI4MEwxOTIgMTYwWiIgZmlsbD0idXJsKCNodWxsR3JhZGllbnQpIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iNCIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJodWxsR3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZThlOGU4O3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM2MDYwNjA7c3RvcC1vcGFjaXR5OjEiIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==",
+      "src": "icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ],
-  "categories": ["games", "entertainment"],
-  "screenshots": [
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4MCIgaGVpZ2h0PSI3MjAiIHZpZXdCb3g9IjAgMCAxMjgwIDcyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEyODAiIGhlaWdodD0iNzIwIiBmaWxsPSIjMGEwYTJlIi8+Cjx0ZXh0IHg9IjY0MCIgeT0iMzYwIiBmaWxsPSIjMDBmZjg4IiBmb250LXNpemU9IjQ4IiBmb250LWZhbWlseT0iT3JiaXRyb24iIHRleHQtYW5jaG9yPSJtaWRkbGUiPldlbHRyYXVtIFNob290ZXI8L3RleHQ+CjwvdGV2Zz4K",
-      "sizes": "1280x720",
-      "type": "image/svg+xml",
-      "form_factor": "wide"
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
