@@ -2,57 +2,62 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Weltraum Shooter</title>
 <meta name="theme-color" content="#0a0a2e">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-body{margin:0;overflow:hidden;background:#000;color:#0f8;font-family:sans-serif}
-.game{position:relative;width:100vw;height:100vh;outline:none}
+/* (Styles stark gekürzt in dieser Variante – Kern ist der gleiche Look) */
+body{margin:0;overflow:hidden;height:100vh;background:#0a0a2e;font-family:'Orbitron','Courier New',monospace}
+.game-container{position:relative;width:100vw;height:100vh;outline:none}
 .player{position:absolute;bottom:50px;left:50%;transform:translateX(-50%);width:60px;height:60px}
 .enemy{position:absolute}
-.bullet,.enemy-bullet{position:absolute;width:6px;height:16px;border-radius:3px}
-.bullet{background:#6f6}
-.enemy-bullet{background:#f44}
-.hud{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.4);padding:8px 12px;border-radius:8px}
-.over{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#000a;padding:20px;border-radius:12px;text-align:center;color:#fff}
-button{padding:8px 16px;border-radius:6px;border:0;background:#6f6;color:#000;font-weight:bold}
+.bullet,.enemy-bullet{position:absolute;width:6px;height:20px;border-radius:3px}
+.bullet{background:linear-gradient(0deg,#0f0,#9f9)}
+.enemy-bullet{background:linear-gradient(0deg,#f00,#faa)}
+.hud{position:absolute;top:20px;left:20px;color:#0f8;font-weight:700;background:rgba(0,0,0,.45);padding:14px 18px;border-radius:12px}
+.game-over{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.9);color:#f33;padding:22px;border-radius:12px}
+.instructions{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);color:#9f9}
 </style>
 </head>
 <body>
-<div class="game" id="root" tabindex="0">
+<div class="game-container" id="gameRoot" tabindex="0">
   <div class="hud">🎯 <span id="score">0</span> | ❤️ <span id="lives">3</span> | 🌊 <span id="wave">1</span></div>
   <div class="player" id="player">
-    <svg viewBox="0 0 60 60" width="60" height="60"><path d="M30,3 L42,18 L45,35 L42,48 L35,52 L25,52 L18,48 L15,35 L18,18 Z" fill="#ccc" stroke="#fff"/></svg>
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30,3 L42,18 L45,35 L42,48 L35,52 L25,52 L18,48 L15,35 L18,18 Z" fill="#ccc" stroke="#fff" stroke-width="1.2"/>
+      <ellipse cx="26" cy="50" rx="4" ry="10" fill="#8df"/>
+      <ellipse cx="34" cy="50" rx="4" ry="10" fill="#8df"/>
+    </svg>
   </div>
-  <div class="over" id="over">SPIEL VORBEI<br>Score: <span id="final">0</span><br><button onclick="restartGame()">Restart</button></div>
+  <div class="game-over" id="gameOver">SPIEL VORBEI – Score: <span id="finalScore">0</span><br><button onclick="restartGame()">Neues Spiel</button></div>
+  <div class="instructions">Pfeiltasten ←/→ • Leertaste / Tippen = Schießen</div>
 </div>
 <script>
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}
-const root=document.getElementById('root'),player=document.getElementById('player');
-const scoreEl=document.getElementById('score'),livesEl=document.getElementById('lives'),waveEl=document.getElementById('wave');
-const over=document.getElementById('over'),final=document.getElementById('final');
-let state={x:innerWidth/2-30,score:0,lives:3,wave:1,run:true,bullets:[],enemies:[],keys:{},last:0,spawn:0};
-player.style.left=state.x+'px';
-document.addEventListener('keydown',e=>{state.keys[e.code]=true; if(['ArrowLeft','ArrowRight','Space'].includes(e.code)) e.preventDefault();});
-document.addEventListener('keyup',e=>state.keys[e.code]=false);
-root.addEventListener('pointerdown',()=>state.keys['Space']=true);
-root.addEventListener('pointerup',()=>state.keys['Space']=false);
-root.addEventListener('pointermove',e=>{state.x=Math.max(0,Math.min(innerWidth-60,e.clientX-30)); player.style.left=state.x+'px';});
-function move(){if(state.keys['ArrowLeft'])state.x=Math.max(0,state.x-8);if(state.keys['ArrowRight'])state.x=Math.min(innerWidth-60,state.x+8);player.style.left=state.x+'px';}
-function shoot(){if(state.keys['Space']&&Date.now()-state.last>250){const b=document.createElement('div');b.className='bullet';b.style.left=(state.x+28)+'px';b.style.bottom='110px';root.appendChild(b);state.bullets.push({el:b,x:state.x+28,y:innerHeight-110});state.last=Date.now();}}
-function mkEnemy(){let w=40,h=40;const e=document.createElement('div');e.className='enemy';e.style.width=w+'px';e.style.height=h+'px';let x=Math.random()*(innerWidth-w);e.style.left=x+'px';e.style.top='0px';e.innerHTML='<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="red"/></svg>';root.appendChild(e);state.enemies.push({el:e,x:x,y:0,w:w,h:h});}
-function loop(){if(!state.run)return;move();shoot();if(Date.now()-state.spawn>1200){mkEnemy();state.spawn=Date.now();}
-let nb=[];for(let b of state.bullets){b.y-=10;b.el.style.bottom=(innerHeight-b.y)+'px';if(b.y>0)nb.push(b);else b.el.remove();}state.bullets=nb;
-let ne=[];for(let e of state.enemies){e.y+=2;e.el.style.top=e.y+'px';if(e.y<innerHeight){ne.push(e);}else e.el.remove();}state.enemies=ne;
+if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}
+const root=document.getElementById('gameRoot');root.focus();addEventListener('click',()=>root.focus());
+const player=document.getElementById('player'),scoreEl=document.getElementById('score'),livesEl=document.getElementById('lives'),waveEl=document.getElementById('wave');
+const over=document.getElementById('gameOver'),final=document.getElementById('finalScore');
+let S={x:innerWidth/2-30,score:0,lives:3,wave:1,run:true,bullets:[],enemies:[],eBullets:[],keys:{},last:0,spawn:0};
+player.style.left=S.x+'px';
+addEventListener('keydown',e=>{S.keys[e.code]=true;if(['ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();},{passive:false});
+addEventListener('keyup',e=>S.keys[e.code]=false);
+root.addEventListener('pointerdown',()=>S.keys['Space']=true);
+root.addEventListener('pointerup',()=>S.keys['Space']=false);
+root.addEventListener('pointermove',e=>{S.x=Math.max(0,Math.min(innerWidth-60,e.clientX-30));player.style.left=S.x+'px';});
+function move(){if(S.keys['ArrowLeft'])S.x=Math.max(0,S.x-8);if(S.keys['ArrowRight'])S.x=Math.min(innerWidth-60,S.x+8);player.style.left=S.x+'px';}
+function shoot(){if(S.keys['Space']&&Date.now()-S.last>220){const b=document.createElement('div');b.className='bullet';b.style.left=(S.x+28)+'px';b.style.bottom='110px';root.appendChild(b);S.bullets.push({el:b,x:S.x+28,y:innerHeight-110});S.last=Date.now();}}
+function mkEnemy(){let w=50,h=50,hp=2,s=2,pts=100;const e=document.createElement('div');e.className='enemy';e.style.width=w+'px';e.style.height=h+'px';let x=Math.random()*(innerWidth-w);e.style.left=x+'px';e.style.top='0px';e.innerHTML='<svg viewBox="0 0 50 50"><ellipse cx="25" cy="25" rx="12" ry="18" fill="#f44" stroke="#fff"/></svg>';root.appendChild(e);S.enemies.push({el:e,x:x,y:0,w:w,h:h,hp:hp,s:s,pts:pts});}
+function loop(){if(!S.run)return;move();shoot();if(Date.now()-S.spawn>900){mkEnemy();S.spawn=Date.now();}
+let nb=[];for(const b of S.bullets){b.y-=12;b.el.style.bottom=(innerHeight-b.y)+'px';if(b.y>0)nb.push(b);else b.el.remove();}S.bullets=nb;
+let ne=[];for(const e of S.enemies){e.y+=e.s;e.el.style.top=e.y+'px';if(e.y<innerHeight)ne.push(e);else e.el.remove();}S.enemies=ne;
 // collisions
-for(let bi=state.bullets.length-1;bi>=0;bi--){const b=state.bullets[bi];for(let ei=state.enemies.length-1;ei>=0;ei--){const e=state.enemies[ei];if(b.x>e.x&&b.x<e.x+e.w&&b.y>e.y&&b.y<e.y+e.h){b.el.remove();state.bullets.splice(bi,1);e.el.remove();state.enemies.splice(ei,1);state.score+=10;scoreEl.textContent=state.score;break;}}}
-// enemies vs player
-for(let ei=state.enemies.length-1;ei>=0;ei--){const e=state.enemies[ei];if(e.y>innerHeight-100&&e.x>state.x-20&&e.x<state.x+60){e.el.remove();state.enemies.splice(ei,1);state.lives--;livesEl.textContent=state.lives;if(state.lives<=0){state.run=false;over.style.display='block';final.textContent=state.score;}}}
-requestAnimationFrame(loop);}
-loop();
-function restartGame(){document.querySelectorAll('.bullet,.enemy').forEach(el=>el.remove());state={x:innerWidth/2-30,score:0,lives:3,wave:1,run:true,bullets:[],enemies:[],keys:{},last:0,spawn:0};scoreEl.textContent='0';livesEl.textContent='3';waveEl.textContent='1';over.style.display='none';player.style.left=state.x+'px';loop();}
+for(let bi=S.bullets.length-1;bi>=0;bi--){const b=S.bullets[bi];for(let ei=S.enemies.length-1;ei>=0;ei--){const e=S.enemies[ei];if(b.x>e.x&&b.x<e.x+e.w&&b.y>e.y&&b.y<e.y+e.h){b.el.remove();S.bullets.splice(bi,1);e.el.remove();S.enemies.splice(ei,1);S.score+=10;scoreEl.textContent=S.score;break;}}}
+for(let ei=S.enemies.length-1;ei>=0;ei--){const e=S.enemies[ei];if(e.y>innerHeight-100&&e.x>S.x-20&&e.x<S.x+60){e.el.remove();S.enemies.splice(ei,1);S.lives--;livesEl.textContent=S.lives;if(S.lives<=0){S.run=false;over.style.display='block';final.textContent=S.score;}}}
+requestAnimationFrame(loop);}loop();
+function restartGame(){document.querySelectorAll('.bullet,.enemy').forEach(el=>el.remove());S={x:innerWidth/2-30,score:0,lives:3,wave:1,run:true,bullets:[],enemies:[],eBullets:[],keys:{},last:0,spawn:0};scoreEl.textContent='0';livesEl.textContent='3';waveEl.textContent='1';over.style.display='none';player.style.left=S.x+'px';loop();}
 </script>
 </body>
 </html>
