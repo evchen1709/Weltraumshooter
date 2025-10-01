@@ -1,30 +1,58 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weltraum Shooter PWA</title>
-    
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#0a0a2e">
-    <meta name="description" content="Ein episches Weltraum-Shooter-Spiel mit 4K-Grafiken">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Space Shooter">
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    
-    <!-- Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMGEwYTJlIi8+CjxwYXRoIGQ9Ik05NiAzMEwxMjAgNjBMMTI2IDEwNUwxMjAgMTQ0TDEwNSAxNTZMODcgMTU2TDcyIDE0NEw2NiAxMDVMNzIgNjBaIiBmaWxsPSJ1cmwoI2h1bGxHcmFkaWVudCkiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Imh1bGxHcmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNlOGU4ZTg7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzYwNjA2MDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K">
-    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMGEwYTJlIi8+CjxwYXRoIGQ9Ik05NiAzMEwxMjAgNjBMMTI2IDEwNUwxMjAgMTQ0TDEwNSAxNTZMODcgMTU2TDcyIDE0NEw2NiAxMDVMNzIgNjBaIiBmaWxsPSJ1cmwoI2h1bGxHcmFkaWVudCkiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Imh1bGxHcmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNlOGU4ZTg7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzYwNjA2MDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-/* --- STYLES AUS DEINER NACHRICHT (gekürzt nicht) --- */
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Weltraum Shooter</title>
+<meta name="theme-color" content="#0a0a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+body{margin:0;overflow:hidden;background:#000;color:#0f8;font-family:sans-serif}
+.game{position:relative;width:100vw;height:100vh;outline:none}
+.player{position:absolute;bottom:50px;left:50%;transform:translateX(-50%);width:60px;height:60px}
+.enemy{position:absolute}
+.bullet,.enemy-bullet{position:absolute;width:6px;height:16px;border-radius:3px}
+.bullet{background:#6f6}
+.enemy-bullet{background:#f44}
+.hud{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.4);padding:8px 12px;border-radius:8px}
+.over{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#000a;padding:20px;border-radius:12px;text-align:center;color:#fff}
+button{padding:8px 16px;border-radius:6px;border:0;background:#6f6;color:#000;font-weight:bold}
+</style>
 </head>
 <body>
-    <!-- ... der KOMPLETTE Body aus deiner Nachricht (unverändert) ... -->
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98554bc9a78bc7e1',t:'MTc1ODkxNjI4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<div class="game" id="root" tabindex="0">
+  <div class="hud">🎯 <span id="score">0</span> | ❤️ <span id="lives">3</span> | 🌊 <span id="wave">1</span></div>
+  <div class="player" id="player">
+    <svg viewBox="0 0 60 60" width="60" height="60"><path d="M30,3 L42,18 L45,35 L42,48 L35,52 L25,52 L18,48 L15,35 L18,18 Z" fill="#ccc" stroke="#fff"/></svg>
+  </div>
+  <div class="over" id="over">SPIEL VORBEI<br>Score: <span id="final">0</span><br><button onclick="restartGame()">Restart</button></div>
+</div>
+<script>
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}
+const root=document.getElementById('root'),player=document.getElementById('player');
+const scoreEl=document.getElementById('score'),livesEl=document.getElementById('lives'),waveEl=document.getElementById('wave');
+const over=document.getElementById('over'),final=document.getElementById('final');
+let state={x:innerWidth/2-30,score:0,lives:3,wave:1,run:true,bullets:[],enemies:[],keys:{},last:0,spawn:0};
+player.style.left=state.x+'px';
+document.addEventListener('keydown',e=>{state.keys[e.code]=true; if(['ArrowLeft','ArrowRight','Space'].includes(e.code)) e.preventDefault();});
+document.addEventListener('keyup',e=>state.keys[e.code]=false);
+root.addEventListener('pointerdown',()=>state.keys['Space']=true);
+root.addEventListener('pointerup',()=>state.keys['Space']=false);
+root.addEventListener('pointermove',e=>{state.x=Math.max(0,Math.min(innerWidth-60,e.clientX-30)); player.style.left=state.x+'px';});
+function move(){if(state.keys['ArrowLeft'])state.x=Math.max(0,state.x-8);if(state.keys['ArrowRight'])state.x=Math.min(innerWidth-60,state.x+8);player.style.left=state.x+'px';}
+function shoot(){if(state.keys['Space']&&Date.now()-state.last>250){const b=document.createElement('div');b.className='bullet';b.style.left=(state.x+28)+'px';b.style.bottom='110px';root.appendChild(b);state.bullets.push({el:b,x:state.x+28,y:innerHeight-110});state.last=Date.now();}}
+function mkEnemy(){let w=40,h=40;const e=document.createElement('div');e.className='enemy';e.style.width=w+'px';e.style.height=h+'px';let x=Math.random()*(innerWidth-w);e.style.left=x+'px';e.style.top='0px';e.innerHTML='<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="red"/></svg>';root.appendChild(e);state.enemies.push({el:e,x:x,y:0,w:w,h:h});}
+function loop(){if(!state.run)return;move();shoot();if(Date.now()-state.spawn>1200){mkEnemy();state.spawn=Date.now();}
+let nb=[];for(let b of state.bullets){b.y-=10;b.el.style.bottom=(innerHeight-b.y)+'px';if(b.y>0)nb.push(b);else b.el.remove();}state.bullets=nb;
+let ne=[];for(let e of state.enemies){e.y+=2;e.el.style.top=e.y+'px';if(e.y<innerHeight){ne.push(e);}else e.el.remove();}state.enemies=ne;
+// collisions
+for(let bi=state.bullets.length-1;bi>=0;bi--){const b=state.bullets[bi];for(let ei=state.enemies.length-1;ei>=0;ei--){const e=state.enemies[ei];if(b.x>e.x&&b.x<e.x+e.w&&b.y>e.y&&b.y<e.y+e.h){b.el.remove();state.bullets.splice(bi,1);e.el.remove();state.enemies.splice(ei,1);state.score+=10;scoreEl.textContent=state.score;break;}}}
+// enemies vs player
+for(let ei=state.enemies.length-1;ei>=0;ei--){const e=state.enemies[ei];if(e.y>innerHeight-100&&e.x>state.x-20&&e.x<state.x+60){e.el.remove();state.enemies.splice(ei,1);state.lives--;livesEl.textContent=state.lives;if(state.lives<=0){state.run=false;over.style.display='block';final.textContent=state.score;}}}
+requestAnimationFrame(loop);}
+loop();
+function restartGame(){document.querySelectorAll('.bullet,.enemy').forEach(el=>el.remove());state={x:innerWidth/2-30,score:0,lives:3,wave:1,run:true,bullets:[],enemies:[],keys:{},last:0,spawn:0};scoreEl.textContent='0';livesEl.textContent='3';waveEl.textContent='1';over.style.display='none';player.style.left=state.x+'px';loop();}
+</script>
+</body>
 </html>
