@@ -1,10 +1,10 @@
 {
   "name": "Weltraum Shooter",
-  "short_name": "Shooter",
-  "start_url": ".",
-  "scope": ".",
+  "short_name": "Weltraum",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0a0a2e",
-  "theme_color": "#0a0a2e",
-  "description": "PWA-Hülle ohne zusätzliche Grafiken."
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "description": "PWA-Hülle ohne Icons."
 }
