@@ -1,0 +1,39 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="192" height="192" fill="#0a0a2e"/>
+<defs>
+<linearGradient id="hullGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" style="stop-color:#e8e8e8;stop-opacity:1" />
+<stop offset="100%" style="stop-color:#606060;stop-opacity:1" />
+</linearGradient>
+<linearGradient id="engineFlame" x1="0%" y1="0%" x2="0%" y2="100%">
+<stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+<stop offset="20%" style="stop-color:#00ddff;stop-opacity:1" />
+<stop offset="60%" style="stop-color:#0088ff;stop-opacity:1" />
+<stop offset="100%" style="stop-color:#0044aa;stop-opacity:1" />
+</linearGradient>
+<filter id="glow">
+<feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+<feMerge> 
+<feMergeNode in="coloredBlur"/>
+<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+</defs>
+<!-- Hauptrumpf -->
+<path d="M96 30L120 60L126 105L120 144L105 156L87 156L72 144L66 105L72 60Z" fill="url(#hullGradient)" stroke="#ffffff" stroke-width="2"/>
+<!-- Flügel -->
+<path d="M72 70L45 80L42 90L45 100L72 95L75 85L72 75Z" fill="url(#hullGradient)" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M120 70L147 80L150 90L147 100L120 95L117 85L120 75Z" fill="url(#hullGradient)" stroke="#ffffff" stroke-width="1.5"/>
+<!-- Cockpit -->
+<ellipse cx="96" cy="60" rx="12" ry="15" fill="#001133" stroke="#88ddff" stroke-width="2"/>
+<ellipse cx="96" cy="58" rx="8" ry="10" fill="#002244" opacity="0.9"/>
+<!-- Triebwerke -->
+<ellipse cx="87" cy="150" rx="6" ry="12" fill="url(#engineFlame)" filter="url(#glow)"/>
+<ellipse cx="105" cy="150" rx="6" ry="12" fill="url(#engineFlame)" filter="url(#glow)"/>
+<!-- Waffen -->
+<rect x="90" y="90" width="12" height="20" fill="#555555" stroke="#888888" stroke-width="1" rx="2"/>
+<!-- Navigationslights -->
+<circle cx="72" cy="75" r="3" fill="#ff3333" opacity="0.9" filter="url(#glow)"/>
+<circle cx="120" cy="75" r="3" fill="#33ff33" opacity="0.9" filter="url(#glow)"/>
+<circle cx="96" cy="45" r="2" fill="#ffffff" opacity="0.8" filter="url(#glow)"/>
+</svg>
