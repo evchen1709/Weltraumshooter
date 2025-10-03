@@ -141,29 +141,211 @@ function shoot() {
 
 
 // --- Gegner, Powerups, Animation, Game-Loop ---
+// --- Gegner erstellen ---
 function createEnemy() {
-    // ... vollständige createEnemy-Logik aus Tills Weltraum Shooter.html ...
+    const enemyTypes = ['fighter', 'scout', 'cruiser'];
+    let type = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+    if (gameState.wave % 5 === 0 && Math.random() < 0.3) type = 'boss';
+    const enemy = document.createElement('div');
+    enemy.className = 'enemy';
+    let width, height, hp, speed, fireRate, points;
+    switch(type) {
+        case 'scout': width = height = 35; hp = 1; speed = 4; fireRate = 2000; points = 150; break;
+        case 'cruiser': width = height = 65; hp = 3; speed = 1; fireRate = 1000; points = 300; break;
+        case 'boss': width = height = 80; hp = 8; speed = 0.5; fireRate = 800; points = 1000; break;
+        default: width = height = 50; hp = 2; speed = 2; fireRate = 1500; points = 100;
+    }
+    enemy.style.width = width + 'px';
+    enemy.style.height = height + 'px';
+    const x = Math.random() * (window.innerWidth - width);
+    enemy.style.left = x + 'px';
+    enemy.style.top = '0px';
+    const timestamp = Date.now();
+    // SVG je nach Typ (gekürzt, siehe Original für Details)
+    if(type==='scout') enemy.innerHTML = `<svg viewBox="0 0 35 35" xmlns="http://www.w3.org/2000/svg"><ellipse cx="17.5" cy="17.5" rx="5" ry="12" fill="#00ff88" stroke="#fff" stroke-width="1"/></svg>`;
+    else if(type==='cruiser') enemy.innerHTML = `<svg viewBox="0 0 65 65" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32.5" cy="32.5" rx="12" ry="20" fill="#8844ff" stroke="#fff" stroke-width="2"/></svg>`;
+    else if(type==='boss') enemy.innerHTML = `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="40" rx="15" ry="25" fill="#ff0088" stroke="#fff" stroke-width="2"/></svg>`;
+    else enemy.innerHTML = `<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><ellipse cx="25" cy="25" rx="8" ry="15" fill="#ff4444" stroke="#fff" stroke-width="1"/></svg>`;
+    gameContainer.appendChild(enemy);
+    gameState.enemies.push({element: enemy, x: x, y: 0, lastShot: Date.now(), type: type, hp: hp, maxHp: hp, speed: speed, fireRate: fireRate, points: points, width: width, height: height});
 }
+
 function createPowerup() {
-    // ... vollständige createPowerup-Logik ...
+    const powerupTypes = ['double', 'rapid', 'shield'];
+    const type = powerupTypes[Math.floor(Math.random() * powerupTypes.length)];
+    const powerup = document.createElement('div');
+    powerup.className = `powerup powerup-${type}`;
+    const x = Math.random() * (window.innerWidth - 30);
+    powerup.style.left = x + 'px';
+    powerup.style.top = '0px';
+    powerup.innerHTML = `<svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="15" r="12" fill="#ffaa00"/></svg>`;
+    gameContainer.appendChild(powerup);
+    gameState.powerups.push({element: powerup, x: x, y: 0, type: type});
 }
+
 function activatePowerup(type) {
-    // ... vollständige activatePowerup-Logik ...
+    const duration = 10000;
+    if(type==='double'){gameState.doubleShot=true;gameState.doubleShotTimer=Date.now()+duration;}
+    if(type==='rapid'){gameState.rapidFire=true;gameState.rapidFireTimer=Date.now()+duration;}
+    if(type==='shield'){
+        if(!gameState.shield){gameState.shield=true;gameState.shieldTimer=Date.now()+duration;const shield=document.createElement('div');shield.className='player-shield';player.appendChild(shield);gameState.shieldElement=shield;}
+        else{gameState.shieldTimer=Date.now()+duration;}
+    }
+    updatePowerupStatus();
 }
+
 function updatePowerupStatus() {
-    // ... vollständige updatePowerupStatus-Logik ...
+    const statusElement = document.getElementById('powerupStatus');
+    let statusHTML = '';
+    if (gameState.doubleShot) statusHTML += `<div>⚡⚡ Doppelschuss</div>`;
+    if (gameState.rapidFire) statusHTML += `<div>▲▲▲ Schnellfeuer</div>`;
+    if (gameState.shield) statusHTML += `<div>◆ Schild</div>`;
+    statusElement.innerHTML = statusHTML;
 }
+
 function enemyShoot(enemy) {
-    // ... vollständige enemyShoot-Logik ...
+    if (Date.now() - enemy.lastShot > enemy.fireRate + Math.random() * 500) {
+        const centerX = enemy.x + enemy.width / 2;
+        const bullet = document.createElement('div');
+        bullet.className = 'enemy-bullet';
+        bullet.style.left = (centerX - 2) + 'px';
+        bullet.style.top = (enemy.y + enemy.height) + 'px';
+        gameContainer.appendChild(bullet);
+        gameState.enemyBullets.push({element: bullet, x: centerX - 2, y: enemy.y + enemy.height});
+        enemy.lastShot = Date.now();
+    }
 }
+
 function createExplosion(x, y, size = 'normal') {
-    // ... vollständige createExplosion-Logik ...
+    const explosion = document.createElement('div');
+    explosion.className = 'explosion';
+    let explosionSize = 80;
+    if (size === 'small') explosionSize = 50;
+    if (size === 'large') explosionSize = 120;
+    if (size === 'boss') explosionSize = 150;
+    explosion.style.width = explosionSize + 'px';
+    explosion.style.height = explosionSize + 'px';
+    explosion.style.left = (x - explosionSize/2) + 'px';
+    explosion.style.top = (y - explosionSize/2) + 'px';
+    explosion.style.transform = `rotate(${Math.random() * 360}deg)`;
+    gameContainer.appendChild(explosion);
+    setTimeout(() => {if (explosion.parentNode) explosion.parentNode.removeChild(explosion);}, 800);
 }
+
 function checkCollisions() {
-    // ... vollständige checkCollisions-Logik ...
+    // Spieler-Kugeln vs Gegner
+    gameState.bullets.forEach((bullet, bulletIndex) => {
+        gameState.enemies.forEach((enemy, enemyIndex) => {
+            if (bullet.x > enemy.x && bullet.x < enemy.x + enemy.width && bullet.y > enemy.y && bullet.y < enemy.y + enemy.height) {
+                bullet.element.remove();
+                gameState.bullets.splice(bulletIndex, 1);
+                enemy.hp--;
+                createExplosion(bullet.x, bullet.y, 'small');
+                if (enemy.hp <= 0) {
+                    createExplosion(enemy.x + enemy.width/2, enemy.y + enemy.height/2, 'normal');
+                    enemy.element.remove();
+                    gameState.enemies.splice(enemyIndex, 1);
+                    gameState.score += enemy.points;
+                    scoreElement.textContent = gameState.score;
+                    gameState.waveEnemiesLeft--;
+                } else {
+                    enemy.element.style.filter = 'brightness(2)';
+                    setTimeout(() => {if (enemy.element.parentNode) enemy.element.style.filter = 'brightness(1)';}, 100);
+                }
+            }
+        });
+    });
+    // Gegner-Kugeln vs Spieler
+    gameState.enemyBullets.forEach((bullet, bulletIndex) => {
+        if (bullet.x > gameState.playerX && bullet.x < gameState.playerX + 60 && bullet.y > window.innerHeight - 110 && bullet.y < window.innerHeight - 50) {
+            bullet.element.remove();
+            gameState.enemyBullets.splice(bulletIndex, 1);
+            if (!gameState.shield) {
+                createExplosion(gameState.playerX + 30, window.innerHeight - 80, 'normal');
+                gameState.lives--;
+                livesElement.textContent = gameState.lives;
+                if (gameState.lives <= 0) gameOver();
+            }
+        }
+    });
+    // Gegner vs Spieler
+    gameState.enemies.forEach((enemy, enemyIndex) => {
+        if (enemy.x < gameState.playerX + 60 && enemy.x + enemy.width > gameState.playerX && enemy.y < window.innerHeight - 50 && enemy.y + enemy.height > window.innerHeight - 110) {
+            createExplosion(enemy.x + enemy.width/2, enemy.y + enemy.height/2, 'normal');
+            enemy.element.remove();
+            gameState.enemies.splice(enemyIndex, 1);
+            if (!gameState.shield) {
+                createExplosion(gameState.playerX + 30, window.innerHeight - 80, 'normal');
+                gameState.lives--;
+                livesElement.textContent = gameState.lives;
+                if (gameState.lives <= 0) gameOver();
+            }
+        }
+    });
+    // Power-Ups vs Spieler
+    gameState.powerups.forEach((powerup, powerupIndex) => {
+        if (powerup.x < gameState.playerX + 60 && powerup.x + 30 > gameState.playerX && powerup.y < window.innerHeight - 50 && powerup.y + 30 > window.innerHeight - 110) {
+            activatePowerup(powerup.type);
+            powerup.element.remove();
+            gameState.powerups.splice(powerupIndex, 1);
+            gameState.score += 50;
+            scoreElement.textContent = gameState.score;
+        }
+    });
 }
+
 function updateGame() {
-    // ... vollständige updateGame-Logik ...
+    if (!gameState.gameRunning) return;
+    // Spieler-Kugeln bewegen
+    gameState.bullets.forEach((bullet, index) => {
+        bullet.y -= 12;
+        bullet.element.style.bottom = (window.innerHeight - bullet.y) + 'px';
+        if (bullet.y < 0) { bullet.element.remove(); gameState.bullets.splice(index, 1); }
+    });
+    // Gegner-Kugeln bewegen
+    gameState.enemyBullets.forEach((bullet, index) => {
+        bullet.y += 8;
+        bullet.element.style.top = bullet.y + 'px';
+        if (bullet.y > window.innerHeight) { bullet.element.remove(); gameState.enemyBullets.splice(index, 1); }
+    });
+    // Gegner bewegen
+    gameState.enemies.forEach((enemy, index) => {
+        enemy.y += enemy.speed;
+        enemy.element.style.top = enemy.y + 'px';
+        enemyShoot(enemy);
+        if (enemy.y > window.innerHeight) { enemy.element.remove(); gameState.enemies.splice(index, 1); gameState.waveEnemiesLeft--; }
+    });
+    // Power-Ups bewegen
+    gameState.powerups.forEach((powerup, index) => {
+        powerup.y += 3;
+        powerup.element.style.top = powerup.y + 'px';
+        if (powerup.y > window.innerHeight) { powerup.element.remove(); gameState.powerups.splice(index, 1); }
+    });
+    // Neue Gegner spawnen
+    if (gameState.waveEnemiesLeft > 0 && Date.now() - gameState.enemySpawnTimer > 2000) {
+        createEnemy();
+        gameState.enemySpawnTimer = Date.now();
+    }
+    // Power-Ups spawnen
+    if (Date.now() - gameState.powerupSpawnTimer > 15000) {
+        createPowerup();
+        gameState.powerupSpawnTimer = Date.now();
+    }
+    // Power-Up Timer prüfen
+    if (gameState.doubleShot && Date.now() > gameState.doubleShotTimer) gameState.doubleShot = false;
+    if (gameState.rapidFire && Date.now() > gameState.rapidFireTimer) gameState.rapidFire = false;
+    if (gameState.shield && Date.now() > gameState.shieldTimer) {
+        gameState.shield = false;
+        if (gameState.shieldElement) { gameState.shieldElement.remove(); gameState.shieldElement = null; }
+    }
+    updatePowerupStatus();
+    // Nächste Welle
+    if (gameState.waveEnemiesLeft <= 0 && gameState.enemies.length === 0) {
+        gameState.wave++;
+        gameState.waveEnemiesLeft = 5 + gameState.wave * 2;
+        waveElement.textContent = gameState.wave;
+    }
+    checkCollisions();
 }
 function gameOver() {
     gameState.gameRunning = false;
