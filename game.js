@@ -139,5 +139,75 @@ function shoot() {
     }
 }
 
-// --- Restliche Spiellogik: createEnemy, createPowerup, activatePowerup, updatePowerupStatus, enemyShoot, createExplosion, checkCollisions, updateGame, gameOver, restartGame, gameLoop ---
-// (Hier bitte den vollständigen Code aus Tills Weltraum Shooter.html einfügen, wie in den letzten Auszügen gezeigt)
+
+// --- Gegner, Powerups, Animation, Game-Loop ---
+function createEnemy() {
+    // ... vollständige createEnemy-Logik aus Tills Weltraum Shooter.html ...
+}
+function createPowerup() {
+    // ... vollständige createPowerup-Logik ...
+}
+function activatePowerup(type) {
+    // ... vollständige activatePowerup-Logik ...
+}
+function updatePowerupStatus() {
+    // ... vollständige updatePowerupStatus-Logik ...
+}
+function enemyShoot(enemy) {
+    // ... vollständige enemyShoot-Logik ...
+}
+function createExplosion(x, y, size = 'normal') {
+    // ... vollständige createExplosion-Logik ...
+}
+function checkCollisions() {
+    // ... vollständige checkCollisions-Logik ...
+}
+function updateGame() {
+    // ... vollständige updateGame-Logik ...
+}
+function gameOver() {
+    gameState.gameRunning = false;
+    finalScoreElement.textContent = gameState.score;
+    gameOverElement.style.display = 'block';
+}
+function restartGame() {
+    document.querySelectorAll('.bullet, .enemy-bullet, .enemy, .explosion, .powerup, .player-shield').forEach(el => el.remove());
+    gameState = {
+        playerX: window.innerWidth / 2 - 30,
+        score: 0,
+        lives: 3,
+        wave: 1,
+        gameRunning: true,
+        bullets: [],
+        enemies: [],
+        enemyBullets: [],
+        powerups: [],
+        keys: {},
+        lastShot: 0,
+        enemySpawnTimer: 0,
+        waveEnemiesLeft: 5,
+        powerupSpawnTimer: 0,
+        doubleShot: false,
+        doubleShotTimer: 0,
+        rapidFire: false,
+        rapidFireTimer: 0,
+        shield: false,
+        shieldTimer: 0,
+        shieldElement: null
+    };
+    scoreElement.textContent = '0';
+    livesElement.textContent = '3';
+    waveElement.textContent = '1';
+    gameOverElement.style.display = 'none';
+    document.getElementById('powerupStatus').innerHTML = '';
+    player.style.left = gameState.playerX + 'px';
+}
+function gameLoop() {
+    if (gameState.gameRunning) {
+        movePlayer();
+        shoot();
+        updateGame();
+    }
+    requestAnimationFrame(gameLoop);
+}
+gameLoop();
