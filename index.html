@@ -3,14 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weltraum Shooter PWA</title>
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIldlbHRyYXVtIFNob290ZXIgUFdBIiwKICAic2hvcnRfbmFtZSI6ICJTcGFjZSBTaG9vdGVyIiwKICAiZGVzY3JpcHRpb24iOiAiRWluIGVwaXNjaGVzIFdlbHRyYXVtLVNob290ZXItU3BpZWwgbWl0IDRLLUdyYWZpa2VuIiwKICAic3RhcnRfdXJsIjogIi4vaW5kZXguaHRtbCIsCiAgImRpc3BsYXkiOiAiZnVsbHNjcmVlbiIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0LXByaW1hcnkiLAogICJ0aGVtZV9jb2xvciI6ICIjMGEwYTJlIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMGEwYTJlIiwKICAic2NvcGUiOiAiLi8iLAogICJsYW5nIjogImRlIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTVRreUlpQm9aV2xuYUhROUlqRTVNaUlnZG1sbGQwSnZlRDBpTUNBd0lERTVNaUF4T1RJaUlHWnBiR3c5SW01dmJtVWlJSGh0Ykc1elBTSm9kSFJ3T2k4dmQzZDNMbmN6TG05eVp5OHlNREF3TDNOMlp5SStDanh5WldOMElIZHBaSFJvUFNJeE9USWlJR2hsYVdkb2REMGlNVGt5SWlCbWFXeHNQU0lqTUdFd1lUSmxJaTgrQ2p4d1lYUm9JR1E5SWsweE1EWWdNekJNTVRJd0lEWXdURXhNTVRJMklERXdOVXhNTVRJd0lERTBORXhNTVRBMUlERTFOa3hNT0RjZ01UVTJURGMySURFME5FeE1OallnTVRBMVREY3lJRFl3V2lJZ1ptbHNiRDBpZFhKc0tDTm9kV3hzUjNKaFpHbGxiblFwSWlCemRISnZhMlU5SWlObVptWm1abVlpSUhOMGNtOXJaUzEzYVdSMGFEMGlNaUl2UGdvOFpHVm1jejRLUEd4cGJtVmhja2R5WVdScFpXNTBJR2xrUFNKb2RXeHNSM0poWkdsbGJuUWlJSGd4UFNJd0pTSWdlVEU5SWpBbElpQjRNajBpTVRBd0pTSWdlVEk5SWpFd01DVWlQZ29OZEJ2d0lHOW1abk5sZEQwaU1DVWlJSE4wZVd4bFBTSnpkRzl3TFdOdmJHOXlPaU5sT0dVNFpUZzdjM1J2Y0MxdmNHRmphWFI1T2pFaUlDOCtDanB6ZEc5d0lHOW1abk5sZEQwaU1UQXdKU0lnYzNSNWJHVTlJbk4wYjNBdFkyOXNiM0k2SXpZd05qQTJNRHR6ZEc5d0xXOXdZV05wZEhrNk1TSWdMejRLUEM5c2FXNWxZWEpIY21Ga2FXVnVkRDRLUEM5a1pXWnpQZ284TDNOMlp6NEsiLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFza2FibGUiCiAgICB9LAogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU5URXlJaUJvWldsbmFIUTlJalV4TWlJZ2RtbGxkMEp2ZUQwaU1DQXdJRFV4TWlBMU1USWlJR1pwYkd3OUltNXZibVVpSUhodGJHNXpQU0pvZEhSd09pOHZkM2QzTG5jekxtOXlaeTh5TURBd0wzTjJaeUkrQ2p4eVpXTjBJSGRwWkhSb1BTSTFNVElpSUdobGFXZG9kRDBpTlRFeUlpQm1hV3hzUFNJak1HRXdZVEpsSWk4K0NqeHdZWFJvSUdROUlrMHlOVFlnT0RCTU16SXdJREUyTUV3ek16WWdNamd3VERNeU1DQXpPRFJNTWpnd0lEUXhOa3d5TXpJZ05ERTJURXhPVWlBek9EUk1NVGMySURJNE1FeE1NVTVTSURFMU4wb2lJR1pwYkd3OUluVnliQ2dqYUhWc2JFZHlZV1JwWlc1MEtTSWdjM1J5YjJ0bFBTSWpabVptWm1abUlpQnpkSEp2YTJVdGQybGtkR2c5SWpRaUx6NEtQR1JsWm5NK1BHeHBibVZoY2tkeVlXUnBaVzUwSUdsa1BTSm9kV3hzUjNKaFpHbGxiblFpSUhneFBTSXdKU0lnZVRFOUlqQWxJaUI0TWowaU1UQXdKU0lnZVRJOUlqRXdNQ1VpUGdvOGMzUnZjQ0J2Wm1aelpYUTlJakFsSWlCemRIbHNaVDBpYzNSdmNDMWpiMnh2Y2pvalpUaGxPR1U0TzNOMGIzQXRiM0JoWTJsMGVUb3hJaUF2UGdvOGMzUnZjQ0J2Wm1aelpYUTlJakl6SlNJZ2MzUjViR1U5SW5OMGIzQXRZMjlzYjNJNkkyUXdaREF3TUR0emRHOXdMVzl3WVdOcGRIazZNU0lnTHo0S1BITjBiM0FnYjJabWMyVjBQU0kxTUNVaUlITjBlV3hsUFNKemRHOXdMV052Ykc5eU9pTmhPR0U0WVRnN2MzUnZjQzF2Y0dGamFYUjVPakVpSUM4K0NqeHpkRzl3SUc5bVpuTmxkRDBpTnpVbElpQnpkSGxzWlQwaWMzUnZjQzFqYjJ4dmNqb2pPREE0TURnd08zTjBiM0F0YjNCaFkybDBlVG94SWlBdlBnbzhjM1J2Y0NCdlptWnpaWFE5SWpFd01DVWlJSE4wZVd4bFBTSnpkRzl3TFdOdmJHOXlPaU0yTURZd05qQTdjM1J2Y0MxdmNHRmphWFI1T2pFaUlDOCtDand2YkdsdVpXRnlSM0poWkdsbGxiblFtQ2p3dlpHVm1jejRLUEM5emRtYytDZz09IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0sCiAgImNhdGVnb3JpZXMiOiBbImdhbWVzIiwiZW50ZXJ0YWlubWVudCJdCn0=">
-    <!-- ...weitere Icons, Fonts, Styles... -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMGEwYTJlIi8+CjxwYXRoIGQ9Ik05NiAzMEwxMjAgNjBMMTI2IDEwNUwxMjAgMTQ0TDEwNSAxNTZMODcgMTU2TDcyIDE0NEw2NiAxMDVMNzIgNjBaIiBmaWxsPSJ1cmwoI2h1bGxHcmFkaWVudCkiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Imh1bGxHcmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNlOGU4ZTg7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzYwNjA2MDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K">
-    <!-- ...restlicher Style und Body wie von dir gepostet... -->
+    <title>Weltraum Shooter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.svg">
+    <link rel="icon" type="image/svg+xml" sizes="192x192" href="icons/icon-192x192.svg">
+    <link rel="icon" type="image/svg+xml" sizes="512x512" href="icons/icon-512x512.svg">
+    <style>
+        body { /* ...dein schöner 4K-Style wie oben... */ }
+        /* ...restliche Styles wie von dir gepostet... */
+    </style>
 </head>
 <body>
-    <!-- ...gesamter Body-Inhalt wie von dir gepostet... -->
+    <div class="game-container">
+        <div class="cosmic-background"></div>
+        <div class="moon"></div>
+        <div class="distant-galaxies"></div>
+        <div class="stars-layer-2"></div>
+        <div class="stars-layer-1"></div>
+        <div class="hud">
+            <div>
+                <span class="stat-label">🎯 Punkte:</span>
+                <span class="stat-value score-value" id="score">0</span>
+            </div>
+            <div>
+                <span class="stat-label">❤️ Leben:</span>
+                <span class="stat-value lives-value" id="lives">3</span>
+            </div>
+            <div>
+                <span class="stat-label">🌊 Welle:</span>
+                <span class="stat-value wave-value" id="wave">1</span>
+            </div>
+        </div>
+        <div class="powerup-status" id="powerupStatus"></div>
+        <div class="player" id="player"> <!-- ...SVG wie oben... --> </div>
+        <div class="game-over" id="gameOver">
+            <div>SPIEL VORBEI!</div>
+            <div style="font-size: 18px; margin: 15px 0;">Endpunktzahl: <span id="finalScore">0</span></div>
+            <button class="restart-btn" onclick="restartGame()">Neues Spiel</button>
+        </div>
+        <div class="instructions">
+            Pfeiltasten zum Bewegen • Leertaste zum Schießen
+        </div>
+    </div>
+    <script src="game.js"></script>
+    <script>
+    // Service Worker Registrierung
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('service-worker.js').then(function(reg) {
+                // Erfolgreich registriert
+            }, function(err) {
+                console.warn('Service Worker konnte nicht registriert werden:', err);
+            });
+        });
+    }
+    // Install-Banner
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const banner = document.createElement('div');
+        banner.id = 'installBanner';
+        banner.style.position = 'fixed';
+        banner.style.bottom = '20px';
+        banner.style.left = '50%';
+        banner.style.transform = 'translateX(-50%)';
+        banner.style.background = 'rgba(0,0,0,0.95)';
+        banner.style.color = '#fff';
+        banner.style.padding = '16px 32px';
+        banner.style.borderRadius = '12px';
+        banner.style.boxShadow = '0 2px 12px #0008';
+        banner.style.zIndex = '9999';
+        banner.innerHTML = 'App installieren? <button id="installBtn" style="margin-left:16px; padding:6px 18px; font-size:1em; border-radius:6px; border:none; background:#00bfff; color:#fff; cursor:pointer;">Installieren</button>';
+        document.body.appendChild(banner);
+        document.getElementById('installBtn').onclick = () => {
+            banner.remove();
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+        };
+    });
+    </script>
 </body>
 </html>
 <!DOCTYPE html>
