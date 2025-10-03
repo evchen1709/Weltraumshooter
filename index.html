@@ -421,42 +421,133 @@ window.addEventListener('beforeinstallprompt', (e) => {
     };
 });
 </script>
-        <script src="game.js"></script>
         <script>
-        // Service Worker Registrierung
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('service-worker.js').then(function(reg) {
-                    // Erfolgreich registriert
-                }, function(err) {
-                    console.warn('Service Worker konnte nicht registriert werden:', err);
-                });
+            // Service Worker Registrierung
+            if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', function() {
+                            navigator.serviceWorker.register('service-worker.js').then(function(reg) {
+                                    // Erfolgreich registriert
+                            }, function(err) {
+                                    console.warn('Service Worker konnte nicht registriert werden:', err);
+                            });
+                    });
+            }
+            // Install-Banner
+            var deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    const banner = document.createElement('div');
+                    banner.id = 'installBanner';
+                    banner.style.position = 'fixed';
+                    banner.style.bottom = '20px';
+                    banner.style.left = '50%';
+                    banner.style.transform = 'translateX(-50%)';
+                    banner.style.background = 'rgba(0,0,0,0.95)';
+                    banner.style.color = '#fff';
+                    banner.style.padding = '16px 32px';
+                    banner.style.borderRadius = '12px';
+                    banner.style.boxShadow = '0 2px 12px #0008';
+                    banner.style.zIndex = '9999';
+                    banner.innerHTML = 'App installieren? <button id="installBtn" style="margin-left:16px; padding:6px 18px; font-size:1em; border-radius:6px; border:none; background:#00bfff; color:#fff; cursor:pointer;">Installieren</button>';
+                    document.body.appendChild(banner);
+                    document.getElementById('installBtn').onclick = () => {
+                            banner.remove();
+                            deferredPrompt.prompt();
+                            deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+                    };
             });
-        }
-        // Install-Banner
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            const banner = document.createElement('div');
-            banner.id = 'installBanner';
-            banner.style.position = 'fixed';
-            banner.style.bottom = '20px';
-            banner.style.left = '50%';
-            banner.style.transform = 'translateX(-50%)';
-            banner.style.background = 'rgba(0,0,0,0.95)';
-            banner.style.color = '#fff';
-            banner.style.padding = '16px 32px';
-            banner.style.borderRadius = '12px';
-            banner.style.boxShadow = '0 2px 12px #0008';
-            banner.style.zIndex = '9999';
-            banner.innerHTML = 'App installieren? <button id="installBtn" style="margin-left:16px; padding:6px 18px; font-size:1em; border-radius:6px; border:none; background:#00bfff; color:#fff; cursor:pointer;">Installieren</button>';
-            document.body.appendChild(banner);
-            document.getElementById('installBtn').onclick = () => {
-                banner.remove();
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
-            };
-        });
+            // --- DOM-basierte Spiellogik ---
+            (function(){
+            var gameContainer = document.querySelector('.game-container');
+            var player = document.getElementById('player');
+            var scoreElement = document.getElementById('score');
+            var livesElement = document.getElementById('lives');
+            var waveElement = document.getElementById('wave');
+            var score = 0, lives = 3, wave = 1;
+            var playerX = window.innerWidth/2 - 30;
+            var moveLeft = false, moveRight = false, shoot = false;
+            var bullets = [], enemies = [];
+            // --- Steuerung ---
+            document.addEventListener('keydown', function(e) {
+                if(['ArrowLeft','a','A'].indexOf(e.key)!==-1) moveLeft = true;
+                if(['ArrowRight','d','D'].indexOf(e.key)!==-1) moveRight = true;
+                if([' ','x','X','Enter'].indexOf(e.key)!==-1) shoot = true;
+            });
+            document.addEventListener('keyup', function(e) {
+                if(['ArrowLeft','a','A'].indexOf(e.key)!==-1) moveLeft = false;
+                if(['ArrowRight','d','D'].indexOf(e.key)!==-1) moveRight = false;
+                if([' ','x','X','Enter'].indexOf(e.key)!==-1) shoot = false;
+            });
+            // --- Spieler bewegen ---
+            function updatePlayer() {
+                if(moveLeft) playerX = Math.max(0, playerX-8);
+                if(moveRight) playerX = Math.min(window.innerWidth-60, playerX+8);
+                player.style.left = playerX + 'px';
+            }
+            // --- Schießen ---
+            var lastShot = 0;
+            function tryShoot() {
+                if(shoot && Date.now()-lastShot>250) {
+                    var bullet = document.createElement('div');
+                    bullet.className = 'bullet';
+                    bullet.style.left = (playerX+28)+'px';
+                    bullet.style.bottom = '110px';
+                    gameContainer.appendChild(bullet);
+                    bullets.push({el:bullet, x:playerX+28, y:window.innerHeight-110});
+                    lastShot = Date.now();
+                }
+            }
+            // --- Gegner erzeugen ---
+            function spawnEnemies() {
+                enemies = [];
+                for(var i=0;i<6;i++) {
+                    var enemy = document.createElement('div');
+                    enemy.className = 'enemy';
+                    enemy.style.left = (100+i*100)+'px';
+                    enemy.style.top = '80px';
+                    gameContainer.appendChild(enemy);
+                    enemies.push({el:enemy, x:100+i*100, y:80, dir:1, hp:1});
+                }
+            }
+            spawnEnemies();
+            // --- Spiel-Loop ---
+            function gameLoop() {
+                updatePlayer();
+                tryShoot();
+                // Bullets bewegen
+                for(var i=0;i<bullets.length;i++) {
+                    var b = bullets[i];
+                    b.y -= 12;
+                    b.el.style.bottom = (window.innerHeight-b.y)+'px';
+                }
+                bullets = bullets.filter(function(b){return b.y>0;});
+                // Gegner bewegen
+                for(var i=0;i<enemies.length;i++) {
+                    var e = enemies[i];
+                    e.x += e.dir*2;
+                    if(e.x<0||e.x>window.innerWidth-50) e.dir*=-1;
+                    e.el.style.left = e.x+'px';
+                }
+                // Kollisionen
+                for(var i=enemies.length-1;i>=0;i--) {
+                    var e = enemies[i];
+                    for(var j=bullets.length-1;j>=0;j--) {
+                        var b = bullets[j];
+                        var ex = e.x, ey = e.y, ew = 50, eh = 50;
+                        var bx = b.x, by = b.y, bw = 6, bh = 20;
+                        if(bx<ex+ew && bx+bw>ex && by<ey+eh && by+bh>ey) {
+                            e.el.remove(); bullets[j].el.remove();
+                            enemies.splice(i,1); bullets.splice(j,1);
+                            score+=10; scoreElement.textContent=score;
+                            break;
+                        }
+                    }
+                }
+                requestAnimationFrame(gameLoop);
+            }
+            gameLoop();
+            })();
         </script>
 </body>
 </html>
