@@ -5,8 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weltraum Shooter</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <!-- Manifest und PWA-Meta -->
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            background: 
+                /* Ultra-detaillierte 4K Nebel-Schichten */
+                radial-gradient(ellipse 800px 400px at 12% 20%, rgba(138, 43, 226, 0.6) 0%, rgba(75, 0, 130, 0.4) 30%, transparent 70%),
+                radial-gradient(ellipse 600px 300px at 88% 10%, rgba(255, 20, 147, 0.5) 0%, rgba(199, 21, 133, 0.3) 25%, transparent 60%),
+                radial-gradient(ellipse 900px 450px at 75% 90%, rgba(0, 191, 255, 0.45) 0%, rgba(30, 144, 255, 0.3) 35%, transparent 75%),
+                radial-gradient(ellipse 700px 350px at 20% 80%, rgba(50, 205, 50, 0.4) 0%, rgba(34, 139, 34, 0.25) 30%, transparent 65%),
+                radial-gradient(ellipse 1200px 600px at 50% 50%, rgba(72, 61, 139, 0.3) 0%, rgba(25, 25, 112, 0.2) 40%, transparent 80%),
+                /* Tiefe Weltraum-Basis mit 4K-Auflösung */
+                linear-gradient(135deg, 
+                    #0a0a2e 0%, 
+                    #1a0a3e 8%, 
+                    #2a1a4e 16%, 
+                    #1a2a5e 24%, 
+                    #2a1a6e 32%, 
+                    #0a1a4e 40%,
+                    #1a0a5e 48%,
+                    #2a2a6e 56%,
+                    #0a2a4e 64%,
+                    #1a1a5e 72%,
+                    #2a0a6e 80%,
+                    #0a0a4e 88%,
+                    #1a1a3e 96%,
+                    #0a0a2e 100%
+                ),
+                /* Zusätzliche Tiefenschichten */
+                radial-gradient(circle at 30% 40%, rgba(72, 61, 139, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(123, 104, 238, 0.1) 0%, transparent 40%);
+            font-family: 'Orbitron', 'Courier New', monospace;
+            overflow: hidden;
+            height: 100vh;
+            /* 4K-optimierte Rendering-Eigenschaften */
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        /* ...restliche Styles wie von dir gepostet... */
+    </style>
+    <!-- PWA: Manifest und Icons -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -126,7 +168,44 @@
         </div>
     </div>
 </body>
-<script src="game.js"></script>
+        <script src="game.js"></script>
+        <!-- PWA: Service Worker und Install-Banner -->
+        <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('service-worker.js').then(function(reg) {
+                    // Erfolgreich registriert
+                }, function(err) {
+                    console.warn('Service Worker konnte nicht registriert werden:', err);
+                });
+            });
+        }
+        // Install-Banner
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const banner = document.createElement('div');
+            banner.id = 'installBanner';
+            banner.style.position = 'fixed';
+            banner.style.bottom = '20px';
+            banner.style.left = '50%';
+            banner.style.transform = 'translateX(-50%)';
+            banner.style.background = 'rgba(0,0,0,0.95)';
+            banner.style.color = '#fff';
+            banner.style.padding = '16px 32px';
+            banner.style.borderRadius = '12px';
+            banner.style.boxShadow = '0 2px 12px #0008';
+            banner.style.zIndex = '9999';
+            banner.innerHTML = 'App installieren? <button id="installBtn" style="margin-left:16px; padding:6px 18px; font-size:1em; border-radius:6px; border:none; background:#00bfff; color:#fff; cursor:pointer;">Installieren</button>';
+            document.body.appendChild(banner);
+            document.getElementById('installBtn').onclick = () => {
+                banner.remove();
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+            };
+        });
+        </script>
 <script>
 // Service Worker Registrierung
 if ('serviceWorker' in navigator) {
